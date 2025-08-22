@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/assets/app_icons.dart';
 
 class WeatherMenuCard extends StatelessWidget {
   final String city;

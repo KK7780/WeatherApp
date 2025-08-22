@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../data/models/weather_model.dart';
+import '../../data/repositories/fake_weather_repository.dart';
+import '../widgets/weather_main_details_card.dart';
 
 import '../../data/repositories/fake_weather_repository.dart';
 
@@ -21,15 +24,11 @@ class WeatherPage extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(weather.city, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 12),
-            Text("${weather.temperature}°C", style: const TextStyle(fontSize: 32, color: Colors.orangeAccent)),
-            const SizedBox(height: 12),
-            Text(weather.description, style: const TextStyle(fontSize: 20)),
+            WeatherDetailCard(weather: weather),
+            // Здесь можно добавлять другие виджеты с деталями
           ],
         ),
       ),
