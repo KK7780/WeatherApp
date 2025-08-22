@@ -90,6 +90,7 @@ flutter:
   fonts:
     - family: RedHatDisplay
       fonts:
-        - asset: assets/fonts/RedHatDisplay-Black.ttf
-        - asset: assets/fonts/RedHatDisplay-Bold.ttf
+        - asset: lib/core/assets/fonts/RedHatDisplay-Regular.ttf
+        - asset: lib/core/assets/fonts/RedHatDisplay-Bold.ttf
+        - asset: lib/core/assets/fonts/RedHatDisplay-Italic.ttf
           weight: 700
