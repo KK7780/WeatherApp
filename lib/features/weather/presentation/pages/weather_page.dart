@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../data/repositories/fake_weather_repository.dart';
+
 class WeatherPage extends StatelessWidget {
   final String city;
 
@@ -7,14 +9,13 @@ class WeatherPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final repository = FakeWeatherRepository();
+    final weather = repository.getWeatherDetail(city);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Погода: $city",
-            style: TextStyle(
-            color: Colors.white,
-            )
-      ),
-      backgroundColor: Colors.blue,
+        title: Text("Погода: ${weather.city}", style: const TextStyle(color: Colors.white)),
+        backgroundColor: Colors.blue,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
@@ -24,12 +25,15 @@ class WeatherPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Погода в $city", style: const TextStyle(fontSize: 24)),
-            const SizedBox(height: 20),
-            const Text("🌤 +25°C", style: TextStyle(fontSize: 32)),
+            Text(weather.city, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 12),
+            Text("${weather.temperature}°C", style: const TextStyle(fontSize: 32, color: Colors.orangeAccent)),
+            const SizedBox(height: 12),
+            Text(weather.description, style: const TextStyle(fontSize: 20)),
           ],
         ),
       ),
     );
   }
 }
+
