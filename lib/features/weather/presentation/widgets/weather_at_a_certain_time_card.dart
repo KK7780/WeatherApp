@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
-class WeatherStatCard extends StatelessWidget {
-  final String title;        // подпись, например: "Скорость ветра"
-  final String value;        // значение, например: "5 м/с"
-  final Color? color;        // опционально: фон карточки
-  final VoidCallback? onTap; // опционально: обработчик нажатия
+import '../../../../core/assets/app_icons.dart';
+import '../../data/models/weather_model.dart';
 
-  const WeatherStatCard({
+class WeatherCard extends StatelessWidget {
+  final WeatherHourModel weather; // модель на час
+  final Color? color;
+  final VoidCallback? onTap;
+
+  const WeatherCard({
     super.key,
-    required this.title,
-    required this.value,
+    required this.weather,
     this.color,
     this.onTap,
   });
@@ -17,61 +18,70 @@ class WeatherStatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-        aspectRatio: 1, // квадратик 1:1
-        child: Material(
-          color: color ?? Colors.white,
-          elevation: 3,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),   // скругление углов
-            side: const BorderSide(                     // контур
-              color: Colors.lightBlueAccent,                       // цвет контура
-              width: 1,                                 // толщина контура
-            ),
+      aspectRatio: 1, // квадрат
+      child: Material(
+        color: color ?? Colors.white,
+        elevation: 3,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(
+            color: Colors.lightBlueAccent, // контур
+            width: 1,
           ),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(20),
-            onTap: onTap,
-            child: Padding(
-              padding: const EdgeInsets.all(14),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final side = constraints.biggest.shortestSide;
-                  final titleSize = (side * 0.12).clamp(12, 18).toDouble();
-                  final valueSize = (side * 0.26).clamp(18, 28).toDouble();
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final side = constraints.biggest.shortestSide;
+                final titleSize = (side * 0.12).clamp(12, 18).toDouble();
+                final valueSize = (side * 0.22).clamp(18, 26).toDouble();
+                final iconSize = side * 0.35;
 
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      // Час
                       Text(
-                        title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                        weather.hour,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: titleSize,
                           color: Colors.grey[700],
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Text(
-                          value,
-                          style: TextStyle(
-                            fontSize: valueSize,
-                            color: Colors.black87,
-                            fontWeight: FontWeight.bold,
-                            height: 1.0,
-                          ),
+
+                      // Иконка (берём по ключу)
+                      AppIcons.getWeatherIcon(
+                        weather.icon, // тут у тебя ключ, напр. "ясно"
+                        size: iconSize,
+                      ),
+
+                      // Температура
+                      Text(
+                        weather.temperature,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: valueSize,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.bold,
+                          height: 1.0,
                         ),
                       ),
                     ],
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
           ),
-        )
+        ),
+      ),
     );
   }
 }

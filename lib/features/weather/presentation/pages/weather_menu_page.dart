@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../data/models/weather_model.dart';
-import '../../data/repositories/fake_weather_repository.dart';
+import '../../domain/repositories/fake_weather_repository.dart';
 import '../widgets/weather_menu_card.dart';
 import 'weather_page.dart';
 

@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 class AppIcons {
   // Словарь: ключ состояния погоды → путь к PNG
   static const Map<String, String> weatherIcons = {
-    "ясно": "lib/core/assets/icons/sunny_sun_weather_climate_forecast.png",
+    "Ясно": "lib/core/assets/icons/sunny_sun_weather_climate_forecast.png",
     "облачно": "lib/core/assets/icons/cloudy.png",
     "дождь": "lib/core/assets/icons/rain.png",
     "снег": "lib/core/assets/icons/snow.png",

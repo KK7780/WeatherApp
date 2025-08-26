@@ -59,7 +59,7 @@ class WeatherDetailCard extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              WeatherIconMapper.mapConditionToWidget(weather.conditionKey, size: screenHeight * 0.08),
+              WeatherIconMapper.mapConditionToWidget(weather.description, size: screenHeight * 0.08),
               const SizedBox(height: 8),
               Text(
                 "${weather.temperature}°C",
