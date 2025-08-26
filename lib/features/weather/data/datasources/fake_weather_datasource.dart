@@ -1,49 +1,75 @@
 import '../models/weather_model.dart';
 
 class FakeWeatherDatasource {
-  // Меню городов
+  // Список городов пользователя (добавленные города)
+  final List<String> userCities = ["Харків"];
+
+  // Список областных городов
+  final List<String> _oblastCities = [
+    "Вінниця", "Волинь", "Дніпро", "Донецьк", "Житомир",
+    "Закарпаття", "Івано-Франківськ", "Київ", "Кропивницький",
+    "Луганськ", "Луцьк", "Львів", "Миколаїв", "Одеса", "Полтава",
+    "Рівне", "Суми", "Тернопіль", "Харків", "Херсон",
+    "Хмельницький", "Черкаси", "Чернігів", "Чернівці"
+  ];
+
+  // Получение полного меню городов (только userCities)
   List<WeatherModel> getWeatherMenu() {
-    return [
-      WeatherModel(city: "Kyiv", temperature: "18", description: "Ясно", date: "ясно"),
-      WeatherModel(city: "Lviv", temperature: "16", description: "Облачно", date: "облачно"),
-      WeatherModel(city: "Odessa", temperature: "22", description: "Солнечно", date: "ясно"),
-    ];
+    return userCities.map((city) => WeatherModel(
+      city: city,
+      temperature: "${15 + city.length % 10}", // фейковая температура
+      description: "Ясно",
+      date: "ясно",
+    )).toList();
   }
 
-  // Детали по городу
+  // Детали по конкретному городу
   WeatherModel getWeatherDetail(String city) {
-    switch (city) {
-      case "Kyiv":
-        return WeatherModel(city: "Kyiv", temperature: "18", description: "Ясно", date: "ясно");
-      case "Lviv":
-        return WeatherModel(city: "Lviv", temperature: "16", description: "Ясно", date: "облачно");
-      case "Odessa":
-        return WeatherModel(city: "Odessa", temperature: "22", description: "Ясно", date: "ясно");
-      default:
-        return WeatherModel(city: city, temperature: "—", description: "—", date: "ясно");
-    }
+    return getWeatherMenu().firstWhere(
+          (c) => c.city.toLowerCase() == city.toLowerCase(),
+      orElse: () => WeatherModel(
+        city: city,
+        temperature: "${15 + city.length % 10}",
+        description: "Ясно",
+        date: "ясно",
+      ),
+    );
   }
 
   // Почасовой прогноз (24 часа)
   List<WeatherHourModel> getHourlyWeather(String city) {
-    return List.generate(24, (index) {
-      return WeatherHourModel(
-        hour: "${index.toString().padLeft(2, '0')}:00",
-        temperature: "${15 + (index % 10)}°C",   // условная температура
-        icon: "ясно",          // фейковая иконка
-      );
-    });
+    return List.generate(24, (index) => WeatherHourModel(
+      hour: "${index.toString().padLeft(2, '0')}:00",
+      temperature: "${15 + (index % 10)}°C",
+      icon: "Ясно",
+    ));
   }
 
-
+  // Прогноз на неделю
   List<WeatherInDateModel> getWeatherForWeak(String city) {
-    return List.generate(7, (index) {
-      return WeatherInDateModel(
-        minTemp: "${13 + (index % 10)}" ,
-        maxTemp: "${26 + (index % 10)}",
-        description: "Ясно", // фейковая иконка
-        date: "${10 + index}.08.2025",
-      );
-    });
+    return List.generate(7, (index) => WeatherInDateModel(
+      minTemp: "${13 + (index % 10)}",
+      maxTemp: "${26 + (index % 10)}",
+      description: "Ясно",
+      date: "${10 + index}.08.2025",
+    ));
   }
+
+  // Добавление города
+  bool addUserCity(String city) {
+    if (!_oblastCities.contains(city) || userCities.contains(city)) return false;
+    userCities.add(city);
+    return true;
+  }
+
+  // Удаление города
+  bool removeUserCity(String city) {
+    return userCities.remove(city);
+  }
+
+  // Получение списка областных городов
+  List<String> getOblastCities() => _oblastCities;
+
+  // Проверка областного города
+  bool isOblastCity(String city) => _oblastCities.contains(city);
 }

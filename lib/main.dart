@@ -13,7 +13,7 @@ class WeatherApp extends StatelessWidget {
     return MaterialApp(
       title: "Weather App",
       theme: ThemeData(
-        fontFamily: "RedHatDisplay", // choose the style of text
+        fontFamily: "Roboto", // choose the style of text
         textTheme: const TextTheme(
           bodyLarge: TextStyle(fontSize: 18),
           bodyMedium: TextStyle(fontSize: 16),

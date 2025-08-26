@@ -4,30 +4,29 @@ import '../../data/models/weather_model.dart';
 class FakeWeatherRepository {
   final FakeWeatherDatasource datasource = FakeWeatherDatasource();
 
-  List<WeatherModel> getWeatherMenu() {
-    return datasource.getWeatherMenu();
-  }
+  List<WeatherModel> getWeatherMenu() => datasource.getWeatherMenu();
 
-  WeatherModel getWeatherDetail(String city) {
-    return datasource.getWeatherDetail(city);
-  }
+  WeatherModel getWeatherDetail(String city) => datasource.getWeatherDetail(city);
 
-  List<WeatherHourModel> getHourlyWeather(String city) {
-    return datasource.getHourlyWeather(city);
-  }
+  List<WeatherHourModel> getHourlyWeather(String city) => datasource.getHourlyWeather(city);
 
   List<WeatherInDateModel> getWeatherForWeak(String city) {
     final rawList = datasource.getWeatherForWeak(city);
 
-    // Преобразуем описание в ключ для иконки
-    return rawList.map((item) {
-      final iconKey = item.description; // или преобразовать, если нужно
-      return WeatherInDateModel(
-        minTemp: item.minTemp,
-        maxTemp: item.maxTemp,
-        description: iconKey, // теперь description соответствует ключу для AppIcons
-        date: item.date,
-      );
-    }).toList();
+    // Преобразуем description в ключ для иконки
+    return rawList.map((item) => WeatherInDateModel(
+      minTemp: item.minTemp,
+      maxTemp: item.maxTemp,
+      description: item.description, // ключ для AppIcons
+      date: item.date,
+    )).toList();
   }
+
+  bool isOblastCity(String city) => datasource.isOblastCity(city);
+
+  bool addUserCity(String city) => datasource.addUserCity(city);
+
+  bool removeUserCity(String city) => datasource.removeUserCity(city);
+
+  List<String> getUserCities() => datasource.userCities;
 }

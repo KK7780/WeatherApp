@@ -91,9 +91,8 @@ flutter:
     - lib/core/assets/icons/
 
   fonts:
-    - family: RedHatDisplay
+    - family: Roboto
       fonts:
-        - asset: lib/core/assets/fonts/RedHatDisplay-Regular.ttf
-        - asset: lib/core/assets/fonts/RedHatDisplay-Bold.ttf
-        - asset: lib/core/assets/fonts/RedHatDisplay-Italic.ttf
+        - asset: lib/core/assets/fonts/RobotoCondensed-VariableFont_wght.ttf
+        - asset: lib/core/assets/fonts/RobotoCondensed-Italic-VariableFont_wght.ttf
           weight: 700
