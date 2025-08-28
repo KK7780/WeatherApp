@@ -3,12 +3,13 @@ import 'package:flutter/cupertino.dart';
 import '../../../core/assets/app_icons.dart';
 
 class WeatherIconMapper {
-  /// Возвращает путь к PNG для заданного состояния погоды
+  // Повертає шлях до PNG для заданого стану погоди
   static String mapConditionToIconPath(String conditionKey) {
+    // Якщо стан погоди не знайдено, повертаємо іконку "невідомо"
     return AppIcons.weatherIcons[conditionKey] ?? AppIcons.weatherIcons['unknown']!;
   }
 
-  /// Можно сразу возвращать виджет Image
+  // Можна одразу повертати віджет Image для заданого стану погоди
   static Widget mapConditionToWidget(String conditionKey, {double size = 50}) {
     final path = mapConditionToIconPath(conditionKey);
     return Image.asset(

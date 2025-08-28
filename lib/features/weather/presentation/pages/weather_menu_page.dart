@@ -5,41 +5,51 @@ import '../widgets/weather_menu_card.dart';
 import 'weather_page.dart';
 
 class WeatherMenuPage extends StatefulWidget {
-  const WeatherMenuPage({super.key});
+  final FakeWeatherRepository repository;
+
+  const WeatherMenuPage({super.key, required this.repository});
 
   @override
   State<WeatherMenuPage> createState() => _WeatherMenuPageState();
 }
 
 class _WeatherMenuPageState extends State<WeatherMenuPage> {
-  final FakeWeatherRepository repository = FakeWeatherRepository();
-  late List<WeatherModel> weatherList;
+  List<WeatherModel> weatherList = [];
 
   @override
   void initState() {
     super.initState();
-    weatherList = repository.getWeatherMenu();
+    _loadWeatherList(); // завантажуємо список міст при старті
   }
 
+  // Завантаження списку погоди
+  void _loadWeatherList() {
+    setState(() {
+      weatherList = widget.repository.getWeatherMenu();
+    });
+  }
+
+  // Оновлення списку на екрані
   void _refreshWeatherList() {
     setState(() {
-      weatherList = repository.getWeatherMenu();
+      weatherList = widget.repository.getWeatherMenu();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final List<WeatherModel> weatherList = widget.repository.getWeatherMenu();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Выбор города",
-          style: TextStyle(color: Colors.white),
-        ),
+        title: const Text("Вибір міста", style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.blue,
         actions: [
           IconButton(
             icon: const Icon(Icons.menu, color: Colors.white),
-            onPressed: () => _showMenuBottomSheet(context),
+            onPressed: () {
+              _showMenuBottomSheet(context);
+            },
           ),
         ],
       ),
@@ -69,6 +79,7 @@ class _WeatherMenuPageState extends State<WeatherMenuPage> {
     );
   }
 
+  // Показ нижнього меню для додавання або видалення міста
   void _showMenuBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -81,7 +92,7 @@ class _WeatherMenuPageState extends State<WeatherMenuPage> {
           children: [
             ListTile(
               leading: const Icon(Icons.add),
-              title: const Text('Добавить город'),
+              title: const Text('Додати місто'),
               onTap: () {
                 Navigator.pop(context);
                 _showAddCityDialog(context);
@@ -89,7 +100,7 @@ class _WeatherMenuPageState extends State<WeatherMenuPage> {
             ),
             ListTile(
               leading: const Icon(Icons.delete),
-              title: const Text('Удалить город'),
+              title: const Text('Видалити місто'),
               onTap: () {
                 Navigator.pop(context);
                 _showDeleteCityDialog(context);
@@ -101,6 +112,7 @@ class _WeatherMenuPageState extends State<WeatherMenuPage> {
     );
   }
 
+  // Діалог для додавання нового міста
   void _showAddCityDialog(BuildContext context) {
     final TextEditingController cityController = TextEditingController();
 
@@ -108,35 +120,46 @@ class _WeatherMenuPageState extends State<WeatherMenuPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Добавить город"),
+          title: const Text("Додати місто"),
           content: TextField(
             controller: cityController,
             decoration: const InputDecoration(
-              hintText: "Введите город",
+              hintText: "Введіть місто",
             ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Отмена"),
+              child: const Text("Скасувати"),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 final newCity = cityController.text.trim();
-                if (newCity.isNotEmpty) {
-                  final added = repository.addUserCity(newCity);
-                  if (added) {
-                    _refreshWeatherList();
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                            "Город уже добавлен или отсутствует в списке областных городов"),
-                      ),
-                    );
-                  }
+                if (newCity.isEmpty) {
+                  Navigator.pop(context);
+                  return;
                 }
-                Navigator.pop(context);
+
+                final navigator = Navigator.of(context);
+                final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+                final added = await widget.repository.addUserCity(newCity);
+
+                if (!navigator.mounted) return;
+
+                if (added) {
+                  _refreshWeatherList();
+                } else {
+                  scaffoldMessenger.showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        "Місто вже додано або його немає у списку обласних міст",
+                      ),
+                    ),
+                  );
+                }
+
+                navigator.pop(); // закриваємо діалог
               },
               child: const Text("OK"),
             ),
@@ -145,8 +168,10 @@ class _WeatherMenuPageState extends State<WeatherMenuPage> {
       },
     );
   }
+
+  // Діалог для видалення обраних міст
   void _showDeleteCityDialog(BuildContext context) {
-    final userCities = repository.datasource.userCities;
+    final userCities = widget.repository.datasource.userCities;
     final Map<String, bool> selectedCities = {
       for (var city in userCities) city: false
     };
@@ -159,7 +184,7 @@ class _WeatherMenuPageState extends State<WeatherMenuPage> {
             final isDeleteEnabled = selectedCities.values.any((v) => v);
 
             return AlertDialog(
-              title: const Text("Удалить город"),
+              title: const Text("Видалити місто"),
               content: SizedBox(
                 width: double.maxFinite,
                 child: ListView(
@@ -180,7 +205,7 @@ class _WeatherMenuPageState extends State<WeatherMenuPage> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text("Отмена"),
+                  child: const Text("Скасувати"),
                 ),
                 ElevatedButton(
                   onPressed: isDeleteEnabled
@@ -190,11 +215,11 @@ class _WeatherMenuPageState extends State<WeatherMenuPage> {
                         .map((e) => e.key)
                         .toList();
 
-                    Navigator.pop(context); // закрываем первый диалог
+                    Navigator.pop(context); // закриваємо перший діалог
                     _confirmDeleteDialog(context, citiesToDelete);
                   }
                       : null,
-                  child: const Text("Удалить"),
+                  child: const Text("Видалити"),
                 ),
               ],
             );
@@ -204,33 +229,33 @@ class _WeatherMenuPageState extends State<WeatherMenuPage> {
     );
   }
 
+  // Підтвердження видалення обраних міст
   void _confirmDeleteDialog(BuildContext context, List<String> citiesToDelete) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Подтверждение"),
+          title: const Text("Підтвердження"),
           content: Text(
-              "Вы действительно хотите удалить следующие города?\n${citiesToDelete.join(", ")}"),
+              "Ви дійсно хочете видалити наступні міста?\n${citiesToDelete.join(", ")}"),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Отмена"),
+              child: const Text("Скасувати"),
             ),
             ElevatedButton(
               onPressed: () {
                 for (var city in citiesToDelete) {
-                  repository.removeUserCity(city);
+                  widget.repository.removeUserCity(city);
                 }
-                Navigator.pop(context); // закрываем подтверждение
-                _refreshWeatherList(); // обновляем список на экране
+                Navigator.pop(context); // закриваємо підтвердження
+                _refreshWeatherList(); // оновлюємо список на екрані
               },
-              child: const Text("Удалить"),
+              child: const Text("Видалити"),
             ),
           ],
         );
       },
     );
   }
-
 }

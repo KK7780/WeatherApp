@@ -3,7 +3,7 @@ import '../../domain/weather_icon_mapper.dart';
 import '../../data/models/weather_model.dart';
 
 class WeatherDetailCard extends StatelessWidget {
-  final WeatherModel weather;
+  final WeatherModel weather; // модель погоди для конкретного міста
 
   const WeatherDetailCard({super.key, required this.weather});
 
@@ -14,7 +14,7 @@ class WeatherDetailCard extends StatelessWidget {
 
     return Container(
       width: screenWidth,
-      height: screenHeight * 0.25, // ~1/4 высоты экрана
+      height: screenHeight * 0.25, // ~1/4 висоти екрану
       margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -31,7 +31,7 @@ class WeatherDetailCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Левый блок: Город и дата
+          // Лівий блок: Місто та дата
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -46,7 +46,7 @@ class WeatherDetailCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                // Форматируем текущую дату, например
+                // Форматуємо поточну дату
                 "${DateTime.now().day}.${DateTime.now().month}.${DateTime.now().year}",
                 style: TextStyle(
                   fontSize: screenHeight * 0.018,
@@ -55,11 +55,14 @@ class WeatherDetailCard extends StatelessWidget {
               ),
             ],
           ),
-          // Правый блок: Иконка и градусы
+          // Правий блок: Іконка погоди та температура
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              WeatherIconMapper.mapConditionToWidget(weather.description, size: screenHeight * 0.08),
+              WeatherIconMapper.mapConditionToWidget(
+                weather.description,
+                size: screenHeight * 0.08,
+              ),
               const SizedBox(height: 8),
               Text(
                 "${weather.temperature}°C",

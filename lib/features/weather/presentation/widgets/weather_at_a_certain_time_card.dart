@@ -4,7 +4,7 @@ import '../../../../core/assets/app_icons.dart';
 import '../../data/models/weather_model.dart';
 
 class WeatherCard extends StatelessWidget {
-  final WeatherHourModel weather; // модель на час
+  final WeatherHourModel weather; // модель погоди на певну годину
   final Color? color;
   final VoidCallback? onTap;
 
@@ -18,14 +18,14 @@ class WeatherCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1, // квадрат
+      aspectRatio: 1, // квадратна картка
       child: Material(
         color: color ?? Colors.white,
         elevation: 3,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
           side: const BorderSide(
-            color: Colors.lightBlueAccent, // контур
+            color: Colors.lightBlueAccent, // обводка
             width: 1,
           ),
         ),
@@ -57,9 +57,9 @@ class WeatherCard extends StatelessWidget {
                         ),
                       ),
 
-                      // Иконка (берём по ключу)
+                      // Іконка погоди (беремо за ключем)
                       AppIcons.getWeatherIcon(
-                        weather.icon, // тут у тебя ключ, напр. "ясно"
+                        weather.icon, // ключ, наприклад "Ясно"
                         size: iconSize,
                       ),
 

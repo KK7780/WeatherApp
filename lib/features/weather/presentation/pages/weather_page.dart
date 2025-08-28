@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
-import '../../data/models/weather_model.dart';
 import '../../domain/repositories/fake_weather_repository.dart';
 import '../widgets/weather_at_a_certain_time_card.dart';
 import '../widgets/weather_day_card.dart';
 import '../widgets/weather_details_card.dart';
 import '../widgets/weather_main_details_card.dart';
 
-import '../../domain/repositories/fake_weather_repository.dart';
-
 class WeatherPage extends StatelessWidget {
   final String city;
-  final titles = const ["Ветер","Влажность","Давление","Ощущается","UV","Видимость"];
-  final values = const ["1","1","2","2","3","3"];
 
+  /// Сторінка з детальною погодою для конкретного міста
   const WeatherPage({super.key, required this.city});
 
   @override
   Widget build(BuildContext context) {
     final repository = FakeWeatherRepository();
+
+    // Отримуємо деталі погоди для міста
     final weather = repository.getWeatherDetail(city);
-    final weatherForWeak = repository.getWeatherForWeak(city);
-    final hourlyWeather = repository.getHourlyWeather(city);
+    final weatherForWeak = repository.getWeatherForWeak(city); // прогноз на тиждень
+    final hourlyWeather = repository.getHourlyWeather(city); // погодинний прогноз
 
     return Scaffold(
       appBar: AppBar(
@@ -34,9 +32,11 @@ class WeatherPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            // Головна детальна карта погоди
             WeatherDetailCard(weather: weather),
-        const SizedBox(height: 10),
+            const SizedBox(height: 10),
 
+            // Горизонтальна панель погодинного прогнозу
             SizedBox(
               height: 100,
               child: ListView.builder(
@@ -48,7 +48,7 @@ class WeatherPage extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.only(right: 8.0),
                     child: FractionallySizedBox(
-                      heightFactor: 0.95, // 95% от высоты родителя
+                      heightFactor: 0.95, // 95% від висоти батьківського контейнера
                       child: WeatherCard(weather: hourData),
                     ),
                   );
@@ -56,44 +56,45 @@ class WeatherPage extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
 
+            // Горизонтальна панель з основними параметрами погоди
             SizedBox(
-              height: 100, // высота панели
+              height: 100,
               child: ListView(
-                scrollDirection: Axis.horizontal, // горизонтальный скролл
-                padding: const EdgeInsets.symmetric(horizontal: 8), // отступ слева и справа
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 children: [
-                  WeatherStatCard(title: "Ветер", value: "5 м/с"),
-                  WeatherStatCard(title: "Влажность", value: "80%"),
-                  WeatherStatCard(title: "Давление", value: "1012 hPa"),
-                  WeatherStatCard(title: "Ощущается", value: "+24°C"),
+                  WeatherStatCard(title: "Вітер", value: "5 м/с"),
+                  WeatherStatCard(title: "Вологість", value: "80%"),
+                  WeatherStatCard(title: "Тиск", value: "1012 hPa"),
+                  WeatherStatCard(title: "Відчувається", value: "+24°C"),
                   WeatherStatCard(title: "UV", value: "5"),
-                  WeatherStatCard(title: "Видимость", value: "10 км"),
+                  WeatherStatCard(title: "Видимість", value: "10 км"),
                 ].map((card) => Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: FractionallySizedBox(
-                    heightFactor: 0.95, // 90% от высоты родителя
+                    heightFactor: 0.95,
                     child: card,
                   ),
                 )).toList(),
               ),
             ),
 
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
 
-            // Вертикальна панель з карточками погоди на день
-          Column(
-            children: weatherForWeak.map((weatherData) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: WeatherDayCard(weatherInDate: weatherData),
-              );
-            }).toList(),
-          ),
-        ]),
+            // Вертикальна панель з картками погоди на кожен день тижня
+            Column(
+              children: weatherForWeak.map((weatherData) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: WeatherDayCard(weatherInDate: weatherData),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-

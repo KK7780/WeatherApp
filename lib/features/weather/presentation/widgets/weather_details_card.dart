@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class WeatherStatCard extends StatelessWidget {
-  final String title;        // подпись, например: "Скорость ветра"
-  final String value;        // значение, например: "5 м/с"
-  final Color? color;        // опционально: фон карточки
-  final VoidCallback? onTap; // опционально: обработчик нажатия
+  final String title;        // підпис, наприклад: "Швидкість вітру"
+  final String value;        // значення, наприклад: "5 м/с"
+  final Color? color;        // необов'язково: фон картки
+  final VoidCallback? onTap; // необов'язково: обробник натискання
 
   const WeatherStatCard({
     super.key,
@@ -17,15 +17,15 @@ class WeatherStatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1, // квадратик 1:1
+      aspectRatio: 1, // квадрат 1:1
       child: Material(
         color: color ?? Colors.white,
         elevation: 3,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),   // скругление углов
+          borderRadius: BorderRadius.circular(20),   // скруглення кутів
           side: const BorderSide(                     // контур
-            color: Colors.lightBlueAccent,                       // цвет контура
-            width: 1,                                 // толщина контура
+            color: Colors.lightBlueAccent,           // колір контуру
+            width: 1,                                 // товщина контуру
           ),
         ),
         child: InkWell(
@@ -43,6 +43,7 @@ class WeatherStatCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Заголовок
                     Text(
                       title,
                       maxLines: 2,
@@ -53,6 +54,7 @@ class WeatherStatCard extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
+                    // Значення
                     Align(
                       alignment: Alignment.bottomLeft,
                       child: Text(
@@ -71,7 +73,7 @@ class WeatherStatCard extends StatelessWidget {
             ),
           ),
         ),
-      )
+      ),
     );
   }
 }

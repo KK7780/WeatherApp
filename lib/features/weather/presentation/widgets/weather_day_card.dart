@@ -3,7 +3,7 @@ import '../../data/models/weather_model.dart';
 import '../../domain/weather_icon_mapper.dart';
 
 class WeatherDayCard extends StatelessWidget {
-  final WeatherInDateModel weatherInDate;
+  final WeatherInDateModel weatherInDate; // модель погоди на день
 
   const WeatherDayCard({
     super.key,
@@ -17,7 +17,7 @@ class WeatherDayCard extends StatelessWidget {
 
     return Container(
       width: screenWidth,
-      height: screenHeight * 0.08, // 1/3 от твоей большой карточки
+      height: screenHeight * 0.08, // висота картки приблизно 1/3 великої картки
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
@@ -34,7 +34,7 @@ class WeatherDayCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Дата слева
+          // Дата зліва
           Text(
             weatherInDate.date,
             style: TextStyle(
@@ -44,13 +44,13 @@ class WeatherDayCard extends StatelessWidget {
             ),
           ),
 
-          // Иконка по центру
+          // Іконка погоди по центру
           WeatherIconMapper.mapConditionToWidget(
-            weatherInDate.description,
+            weatherInDate.description, // ключ для іконки
             size: screenHeight * 0.05,
           ),
 
-          // Температуры справа
+          // Мінімальна та максимальна температура справа
           Text(
             "${weatherInDate.minTemp}°C - ${weatherInDate.maxTemp}°C",
             style: TextStyle(

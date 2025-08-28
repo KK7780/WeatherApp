@@ -1,7 +1,7 @@
 class WeatherHourModel {
-  final String hour;         // например "01:00"
-  final String temperature;  // температура
-  final String icon;         // путь к иконке (например "assets/icons/clear.png")
+  final String hour;
+  final String temperature;
+  final String icon;
 
   WeatherHourModel({
     required this.hour,

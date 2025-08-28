@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../../../../core/assets/app_icons.dart';
 
 class WeatherMenuCard extends StatelessWidget {
-  final String city;
-  final String temperature;
-  final String description;
-  final VoidCallback onTap;
+  final String city;          // місто
+  final String temperature;   // температура
+  final String description;   // опис погоди
+  final VoidCallback onTap;   // дія при натисканні
 
   const WeatherMenuCard({
     super.key,
@@ -25,14 +25,14 @@ class WeatherMenuCard extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.lightBlueAccent,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(30), // закруглені кути
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Город слева
+            // Ліворуч: Назва міста
             Text(
               city,
               style: TextStyle(
@@ -40,7 +40,7 @@ class WeatherMenuCard extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            // Температура и описание справа
+            // Праворуч: Температура та опис погоди
             Row(
               children: [
                 Text(
